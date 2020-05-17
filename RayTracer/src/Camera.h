@@ -5,14 +5,31 @@
 
 class Camera {
 public:
-	Camera(point3 origin = point3(0.0f, 0.0f, 0.0f), vec3 horizontal = vec3(4.0f, 0.0f, 0.0f), vec3 vertical = vec3(0.0f, 9.0f / 4.0f, 0.0f))
-		: m_Origin(origin), m_Horizontal(horizontal), m_Vertical(vertical)
+	Camera(point3 lookfrom, point3 lookat, vec3 up, float vfov, 
+		float aspect_ratio, float aperture, float focusDis)
 	{
-		m_Lower_left_corner = m_Origin - m_Horizontal / 2 - m_Vertical / 2 - vec3(0.0f, 0.0f, 1.0f);
+		m_Origin = lookfrom;
+		m_LensRadius = aperture / 2;
+
+		float theta = degrees_to_radians(vfov);
+		float half_height = tan(theta / 2);
+		float half_width = aspect_ratio * half_height;
+
+		m_W = unit_vector(lookfrom - lookat);
+		m_U = unit_vector(cross(up, m_W));
+		m_V = cross(m_W, m_U);
+
+		m_Lower_left_corner = m_Origin - half_width * focusDis * m_U - half_height * focusDis * m_V - focusDis * m_W;
+
+		m_Horizontal = 2 * half_width * focusDis * m_U;
+		m_Vertical = 2 * half_height * focusDis * m_V;
 	}
 
 	ray get_ray(float u, float v) const {
-		return ray(m_Origin, m_Lower_left_corner + u * m_Horizontal + v * m_Vertical - m_Origin);
+		vec3 rd = m_LensRadius * random_in_unit_disk();
+		vec3 offset = m_U * rd.x() + v * rd.y();
+
+		return ray(m_Origin + offset, m_Lower_left_corner + u * m_Horizontal + v * m_Vertical - m_Origin - offset);
 	}
 
 private:
@@ -20,5 +37,7 @@ private:
 	point3 m_Lower_left_corner;
 	vec3 m_Horizontal;
 	vec3 m_Vertical;
+	vec3 m_U, m_V, m_W;
+	float m_LensRadius;
 };
 #endif

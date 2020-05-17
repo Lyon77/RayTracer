@@ -30,7 +30,7 @@ color rayColor(const ray& r, const hittable& world, int depth) {
 
 int main()
 {
-	const auto aspectRatio = 16.0f / 9.0f;
+	const float aspectRatio = 16.0f / 9.0f;
 	const int image_width = 384;
 	const int image_height = static_cast<int>(image_width / aspectRatio);
 	const int samples_per_pixel = 10;
@@ -39,7 +39,13 @@ int main()
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
 	// Define Origin and Axies
-	Camera camera(point3(0.0f, 0.0f, 0.0f), vec3(4.0f, 0.0f, 0.0f), vec3(0.0f, 9.0f / 4.0f, 0.0f));
+	point3 lookfrom(3, 3, 2);
+	point3 lookat(0, 0, -1);
+	vec3 up(0, 1, 0);
+	auto aperture = 0.5;
+	auto focusDis = (lookfrom - lookat).length();
+	
+	Camera camera(lookfrom, lookat, up, 20, aspectRatio, aperture, focusDis);
 
 	hittable_list world;
 	world.add(std::make_shared<sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(color(0.1f, 0.2f, 0.5f))));

@@ -132,6 +132,16 @@ vec3 refract(const vec3& uv, const vec3& normal, float factor)
 //////////////////////////////////////////////////////////////////
 /// Random ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
+vec3 random_in_unit_disk()
+{
+	while (true)
+	{
+		vec3 p = vec3(random_float(-1, 1), random_float(-1, 1), 0);
+		if (p.length_squared() < 1)
+			return p;
+	}
+}
+
 vec3 random_in_unit_sphere() {
 	while (true) {
 		vec3 p = vec3::random(-1, 1);
