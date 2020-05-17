@@ -10,6 +10,7 @@
 class vec3 {
 public:
 	vec3() : e {0, 0, 0} {}
+	vec3(float val) : e {val, val, val} {}
 	vec3(float e0, float e1, float e2) : e{ e0, e1, e2 } {}
 
 	float x() const { return e[0]; }
@@ -118,6 +119,14 @@ inline vec3 unit_vector(vec3 v) {
 vec3 reflect(const vec3& v, const vec3& normal)
 {
 	return v - 2 * dot(v, normal) * normal;
+}
+
+vec3 refract(const vec3& uv, const vec3& normal, float factor)
+{
+	float cos_theta = dot(-uv, normal);
+	vec3 para = factor * (uv + cos_theta * normal);
+	vec3 perp = -sqrt(1.0 - para.length_squared()) * normal;
+	return para + perp;
 }
 
 //////////////////////////////////////////////////////////////////

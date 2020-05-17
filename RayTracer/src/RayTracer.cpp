@@ -42,10 +42,10 @@ int main()
 	Camera camera(point3(0.0f, 0.0f, 0.0f), vec3(4.0f, 0.0f, 0.0f), vec3(0.0f, 9.0f / 4.0f, 0.0f));
 
 	hittable_list world;
-	world.add(std::make_shared <sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(color(0.7f, 0.3f, 0.3f))));
-	world.add(std::make_shared <sphere>(point3( 0.0f, -100.5, -1.0f), 100.0f, std::make_shared<lambertian>(color(0.8f, 0.8f, 0.0f))));
-	world.add(std::make_shared <sphere>(point3( 1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<metal>(color(0.8f, 0.6f, 0.2f), 0.3f)));
-	world.add(std::make_shared <sphere>(point3(-1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<metal>(color(0.8f, 0.8f, 0.8f), 1.0f)));
+	world.add(std::make_shared<sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(color(0.1f, 0.2f, 0.5f))));
+	world.add(std::make_shared<sphere>(point3( 0.0f, -100.5, -1.0f), 100.0f, std::make_shared<lambertian>(color(0.8f, 0.8f, 0.0f))));
+	world.add(std::make_shared<sphere>(point3( 1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<metal>(color(0.8f, 0.6f, 0.2f), 0.3f)));
+	world.add(std::make_shared<sphere>(point3(-1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<dielectric>(color(1.0f), 1.5f)));
 
 
 	for (int j = image_height - 1; j >= 0; --j) 
