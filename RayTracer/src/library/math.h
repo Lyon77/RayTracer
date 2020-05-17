@@ -11,8 +11,8 @@
 
 // Constants
 
-const double INF = std::numeric_limits<float>::infinity();
-const double PI = 3.1415926535897932385;
+const float INF = std::numeric_limits<float>::infinity();
+const float PI = 3.1415926535897932385f;
 
 // Utility Functions
 inline double degrees_to_radians(float degrees) {

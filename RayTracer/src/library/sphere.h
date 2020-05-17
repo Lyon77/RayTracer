@@ -9,7 +9,9 @@
 class sphere : public hittable
 {
 public:
-	sphere(point3 center, float r) : m_Center(center), m_Radius(r) {};
+	sphere() {}
+	sphere(point3 center, float r, std::shared_ptr<material> m)
+		: m_Center(center), m_Radius(r), m_MatPtr(m) {};
 
 	virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const override
 	{
@@ -30,6 +32,7 @@ public:
 				rec.p = r.at(rec.t);
 				vec3 outward_normal = (rec.p - m_Center) / m_Radius;
 				rec.set_face_normal(r, outward_normal);
+				rec.matPtr = m_MatPtr;
 				return true;
 			}
 
@@ -40,6 +43,7 @@ public:
 				rec.p = r.at(rec.t);
 				vec3 outward_normal = (rec.p - m_Center) / m_Radius;
 				rec.set_face_normal(r, outward_normal);
+				rec.matPtr = m_MatPtr;
 				return true;
 			}
 		}
@@ -49,6 +53,7 @@ public:
 private:
 	point3 m_Center;
 	float m_Radius;
+	std::shared_ptr<material> m_MatPtr;
 };
 
 

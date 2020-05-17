@@ -3,11 +3,15 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
+#include "math.h"
 #include "ray.h"
+
+class material; // to notify hittables of materials
 
 struct hit_record {
 	point3 p;
 	vec3 normal;
+	std::shared_ptr<material> matPtr;
 	float t;
 	bool front_face;
 

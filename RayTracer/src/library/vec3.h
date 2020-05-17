@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <iostream>
+#include "math.h"
 
 class vec3 {
 public:
@@ -14,6 +15,16 @@ public:
 	float x() const { return e[0]; }
 	float y() const { return e[1]; }
 	float z() const { return e[2]; }
+
+	inline static vec3 random() 
+	{
+		return vec3(random_float(), random_float(), random_float());
+	}
+
+	inline static vec3 random(float min, float max) 
+	{
+		return vec3(random_float(min, max), random_float(min, max), random_float(min, max));
+	}
 
 	vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
 	float operator[](int i) const { return e[i]; }
@@ -53,7 +64,6 @@ public:
 	float length_squared() const {
 		return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
 	}
-
 
 	float e[3];
 };
@@ -103,6 +113,41 @@ inline vec3 cross(const vec3& u, const vec3& v) {
 inline vec3 unit_vector(vec3 v) {
 	return v / v.length();
 }
+
+
+vec3 reflect(const vec3& v, const vec3& normal)
+{
+	return v - 2 * dot(v, normal) * normal;
+}
+
+//////////////////////////////////////////////////////////////////
+/// Random ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+vec3 random_in_unit_sphere() {
+	while (true) {
+		vec3 p = vec3::random(-1, 1);
+		if (p.length_squared() < 1)
+			return p;
+	}
+}
+
+vec3 random_unit_vector()
+{
+	float a = random_float(0, 2 * PI);
+	float z = random_float(-1, 1);
+	float r = sqrt(1 - z * z);
+	return vec3(r * cos(a), r * sin(a), z);
+}
+
+vec3 random_in_hemisphere(const vec3& nornal)
+{
+	vec3 in_unit_sphere = random_in_unit_sphere();
+	if (dot(in_unit_sphere, nornal) > 0.0)
+		return in_unit_sphere;
+	else
+		return -in_unit_sphere;
+}
+//////////////////////////////////////////////////////////////////
 
 using point3 = vec3;
 using color = vec3;
