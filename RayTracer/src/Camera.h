@@ -6,7 +6,8 @@
 class Camera {
 public:
 	Camera(point3 lookfrom, point3 lookat, vec3 up, float vfov, 
-		float aspect_ratio, float aperture, float focusDis)
+		float aspect_ratio, float aperture, float focusDis,
+		float t0, float t1)
 	{
 		m_Origin = lookfrom;
 		m_LensRadius = aperture / 2;
@@ -23,13 +24,19 @@ public:
 
 		m_Horizontal = 2 * half_width * focusDis * m_U;
 		m_Vertical = 2 * half_height * focusDis * m_V;
+
+		m_T0 = t0;
+		m_T1 = t1;
 	}
 
 	ray get_ray(float u, float v) const {
 		vec3 rd = m_LensRadius * random_in_unit_disk();
 		vec3 offset = m_U * rd.x() + v * rd.y();
 
-		return ray(m_Origin + offset, m_Lower_left_corner + u * m_Horizontal + v * m_Vertical - m_Origin - offset);
+		return ray(m_Origin + offset,
+			m_Lower_left_corner + u * m_Horizontal + v * m_Vertical - m_Origin - offset, 
+			random_float(m_T0, m_T1)
+		);
 	}
 
 private:
@@ -39,5 +46,6 @@ private:
 	vec3 m_Vertical;
 	vec3 m_U, m_V, m_W;
 	float m_LensRadius;
+	float m_T0, m_T1; // Shutter open/close time
 };
 #endif

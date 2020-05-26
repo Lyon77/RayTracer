@@ -4,6 +4,7 @@
 #include "library/hittable_list.h"
 #include "library/sphere.h"
 #include "library/material.h"
+#include "library/bvh.h"
 
 #include "Camera.h"
 
@@ -42,17 +43,17 @@ int main()
 	point3 lookfrom(3, 3, 2);
 	point3 lookat(0, 0, -1);
 	vec3 up(0, 1, 0);
-	auto aperture = 0.5;
-	auto focusDis = (lookfrom - lookat).length();
+	float aperture = 0.5f;
+	float focusDis = (lookfrom - lookat).length();
 	
-	Camera camera(lookfrom, lookat, up, 20, aspectRatio, aperture, focusDis);
+	Camera camera(lookfrom, lookat, up, 20, aspectRatio, aperture, focusDis, 0.0f, 1.0f);
 
 	hittable_list world;
-	world.add(std::make_shared<sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(color(0.1f, 0.2f, 0.5f))));
+	world.add(std::make_shared<moving_sphere>(point3( 0.0f, 0.0f, -1.0f), point3(0.0f, 0.3f, -1.0f), 0.0f, 1.0f, 0.5f, std::make_shared<lambertian>(color(0.1f, 0.2f, 0.5f))));
+	//world.add(std::make_shared<sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(color(0.1f, 0.2f, 0.5f))));
 	world.add(std::make_shared<sphere>(point3( 0.0f, -100.5, -1.0f), 100.0f, std::make_shared<lambertian>(color(0.8f, 0.8f, 0.0f))));
 	world.add(std::make_shared<sphere>(point3( 1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<metal>(color(0.8f, 0.6f, 0.2f), 0.3f)));
 	world.add(std::make_shared<sphere>(point3(-1.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<dielectric>(color(1.0f), 1.5f)));
-
 
 	for (int j = image_height - 1; j >= 0; --j) 
 	{

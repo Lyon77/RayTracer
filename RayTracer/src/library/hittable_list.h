@@ -19,6 +19,8 @@ public:
 	void clear() { m_Objects.clear(); }
 	void add(std::shared_ptr<hittable> object) { m_Objects.push_back(object); }
 
+	std::vector<std::shared_ptr<hittable>> GetObjects() const { return m_Objects; }
+
 	virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const override
 	{
 		hit_record temp_rec;
@@ -38,7 +40,25 @@ public:
 		return hit_anything;
 	}
 
-private:
+	virtual bool bounding_box(float t0, float t1, aabb& output_box) const override {
+		if (m_Objects.empty())
+			return false;
+
+		aabb temp_box;
+		bool first_box = true;
+
+		for (const auto& object : m_Objects)
+		{
+			if (!object->bounding_box(t0, t1, temp_box))
+				return false;
+			output_box = first_box ? temp_box : surrounding_box(output_box, temp_box);
+			first_box = false;
+		}
+
+		return true;
+	}
+
+public:
 	std::vector<std::shared_ptr<hittable>> m_Objects;
 };
 
