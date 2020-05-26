@@ -1,6 +1,7 @@
 #pragma once
 
 #include "math.h"
+#include "noise.h"
 
 class texture
 {
@@ -44,4 +45,21 @@ public:
 
 private:
 	std::shared_ptr<texture> m_Even, m_Odd;
+};
+
+class noise_texture : public texture
+{
+public:
+	noise_texture() : m_Scale(1.0f) {}
+	noise_texture(float scale) : m_Scale(scale) {}
+
+	virtual color value(float u, float v, const point3& p) const override
+	{
+		return color(1, 1, 1) * 0.5 * (1.0 + sin(m_Scale * p.z() + 10 * m_Noise.turbulence(m_Scale * p))); // Prevent negative numbers from noise
+		//return color(1, 1, 1) * 0.5 * (1.0 + m_Noise.noise(m_Scale * p)); // Prevent negative numbers from noise
+	}
+
+private:
+	perlin m_Noise;
+	float m_Scale;
 };
