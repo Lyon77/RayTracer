@@ -55,6 +55,14 @@ public:
 		return true;
 	}
 
+	void get_sphere_uv(const vec3& p, float& u, float& v)
+	{
+		auto phi = atan2(p.y(), p.x());
+		auto theta = asin(p.z());
+		u = 1 - (phi + PI) / (2 * PI);
+		v = (theta + PI / 2) / PI;
+	}
+
 private:
 	point3 m_Center;
 	float m_Radius;

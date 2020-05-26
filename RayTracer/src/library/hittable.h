@@ -14,6 +14,7 @@ struct hit_record {
 	vec3 normal;
 	std::shared_ptr<material> matPtr;
 	float t;
+	float u, v; // Surface texture Coords
 	bool front_face;
 
 	inline void set_face_normal(const ray& r, const vec3& outward_normal)

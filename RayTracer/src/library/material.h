@@ -6,6 +6,7 @@
 #include "vec3.h"
 #include "ray.h"
 #include "hittable.h"
+#include "texture.h"
 
 class material
 {
@@ -16,18 +17,18 @@ public:
 class lambertian : public material
 {
 public:
-	lambertian(const color& a)
+	lambertian(std::shared_ptr<texture> a)
 		: m_Albedo(a) {};
 
 	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
 	{
 		vec3 scatterDir = rec.normal + random_unit_vector();
 		scattered = ray(rec.p, scatterDir, r_in.GetTime());
-		attenuation = m_Albedo;
+		attenuation = m_Albedo->value(rec.u, rec.v, rec.p);
 		return true;
 	}
 private:
-	color m_Albedo;
+	std::shared_ptr<texture> m_Albedo;
 };
 
 class metal : public material
