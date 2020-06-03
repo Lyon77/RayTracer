@@ -11,6 +11,11 @@
 class material
 {
 public:
+	virtual color emitted(float u, float v, const point3& p) const
+	{
+		return color(0.0f);
+	}
+
 	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const = 0;
 };
 
@@ -94,6 +99,26 @@ public:
 private:
 	color m_Albedo;
 	float m_Idx;
+};
+
+class diffuse_light : public material
+{
+public:
+	diffuse_light(std::shared_ptr<texture> a)
+		: m_Emit(a) {}
+
+	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
+	{
+		return false;
+	}
+
+	virtual color emitted(float u, float v, const point3& p) const override
+	{
+		return m_Emit->value(u, v, p);
+	}
+
+private:
+	std::shared_ptr<texture> m_Emit;
 };
 
 #endif
