@@ -5,3 +5,6 @@
 **.vcxproj.filters
 **.vcxproj.user
 x64
+
+# Resource Files
+/res/

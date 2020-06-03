@@ -37,12 +37,15 @@ hittable_list scene() {
 		);
 
 	auto perlin_texture = std::make_shared<noise_texture>(3.0f);
+
+	//auto earth_texture = std::make_shared<image_texture>("res/textures/earthmap.jpg");
 	////////////////////////////////////////////////////////////
 
 	hittable_list world;
-	world.add(std::make_shared<moving_sphere>(point3(0.0f, 0.0f, 0.0f), point3(0.0f, 0.2f, 0.0f), 0.0f, 1.0f, 0.5f, std::make_shared<lambertian>(std::make_shared<solid_color>(0.1f, 0.2f, 0.5f))));
-	//world.add(std::make_shared<sphere>(point3( 0.0f, 0.0f, -1.0f),   0.5f,   std::make_shared<lambertian>(std::make_shared<solid_color>(0.1f, 0.2f, 0.5f))));
 	world.add(std::make_shared<sphere>(point3(0.0f, -500.5, 0.0f), 500.0f, std::make_shared<lambertian>(perlin_texture)));
+
+	world.add(std::make_shared<moving_sphere>(point3(0.0f, 0.0f, 0.0f), point3(0.0f, 0.2f, 0.0f), 0.0f, 1.0f, 0.5f, std::make_shared<lambertian>(std::make_shared<solid_color>(0.1f, 0.2f, 0.5f))));
+	//world.add(std::make_shared<sphere>(point3( 0.0f, 1.2f, 0.0f), 0.5f, std::make_shared<lambertian>(earth_texture)));
 	world.add(std::make_shared<sphere>(point3(1.0f, 0.0f, 0.0f), 0.5f, std::make_shared<metal>(color(0.8f, 0.6f, 0.2f), 0.3f)));
 	world.add(std::make_shared<sphere>(point3(-1.0f, 0.0f, 0.0f), 0.5f, std::make_shared<dielectric>(color(1.0f), 1.5f)));
 
@@ -56,10 +59,10 @@ hittable_list scene() {
 int main()
 {
 	const float aspectRatio = 16.0f / 9.0f;
-	const int image_width = 600;
+	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspectRatio);
 	const int samples_per_pixel = 10; // To make the edges not pixelated
-	const int max_depth = 70; // How many times the ray will bounce
+	const int max_depth = 50; // How many times the ray will bounce
 
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
