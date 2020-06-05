@@ -40,9 +40,9 @@ aabb surrounding_box(aabb box0, aabb box1)
 	point3 small(fmin(box0.GetMin().x(), box1.GetMin().x()),
 		         fmin(box0.GetMin().y(), box1.GetMin().y()),
 		         fmin(box0.GetMin().z(), box1.GetMin().z()));
-	point3 big(fmin(box0.GetMax().x(), box1.GetMax().x()),
-		       fmin(box0.GetMax().y(), box1.GetMax().y()),
-		       fmin(box0.GetMax().z(), box1.GetMax().z()));
+	point3 big(fmax(box0.GetMax().x(), box1.GetMax().x()),
+		       fmax(box0.GetMax().y(), box1.GetMax().y()),
+		       fmax(box0.GetMax().z(), box1.GetMax().z()));
 
 	return aabb(small, big);
 }
